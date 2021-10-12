@@ -6,3 +6,6 @@
     width:100% !important;
     margin-bottom: 10px !important;
 }
+.red-border{
+    border: 3px solid red;
+}
