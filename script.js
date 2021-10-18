@@ -1,46 +1,47 @@
 (function () {
     let studentsArray = [
         {
-            Name: "Boris",
-            Surname: "Khazanov",
-            Middle: "Efimovich",
+            Name: "Boris Efimovich Khazanov",
             Birth: new Date(2003, 06, 28),
             Start: "2020",
             Faculty: "Software Engineering",
         },
         {
-            Name: "Ksenia",
-            Surname: "Labutina",
-            Middle: "Sergeevna",
+            Name: "Ksenia Sergeevna Labutina",
             Birth: new Date(2001, 03, 05),
             Start: "2019",
             Faculty: "RF",
         },
         {
-            Name: "Andrew",
-            Surname: "Polyakov",
-            Middle: "Sergeevich",
+            Name: "Andrew Sergeevich Polyakov",
             Birth: new Date(1999, 10, 8),
             Start: "2017",
             Faculty: "ASGAP",
         },
         {
-            Name: "Grigory",
-            Surname: "Khazanov",
-            Middle: "Efimovich",
+            Name: "Grigory Efimovich Khazanov",
             Birth: new Date(1997, 09, 31),
             Start: "2014",
             Faculty: "ASGAP",
         },
         {
-            Name: "Arseniy",
-            Surname: "Trofimov",
-            Middle: "Denisovich",
+            Name: "Arseniy Denisovich Trofimov",
             Birth: new Date(2001, 05, 28),
             Start: "2019",
             Faculty: "VMK",
         }
     ];
+    function sortStudents(param){
+        studentsArray.sort(function(a,b){
+            if (a[param] > b[param]){
+                return 1;
+            }
+            if (a[param] < b[param]){
+                return -1;
+            }
+            return 0;
+        })
+    }
     function createTitle(str) {
         const title = document.createElement('h2');
         title.innerHTML = str;
@@ -52,12 +53,43 @@
         let thead = document.createElement('thead');
         let tbody = document.createElement('tbody');
         let theadTr = document.createElement('tr');
-        let theadArr = ["№", "Name", "Middle name", "Surname", "Date of birth", "Start year", "Faculty"];
-        for (let i = 0; i < 7; i++) {
-            let th = document.createElement('td');
-            th.innerText = theadArr[i];
-            theadTr.append(th);
-        }
+
+        let th = document.createElement('td');
+        th.innerText = "№";
+        theadTr.append(th);
+
+        th = document.createElement('td');
+        th.innerText = "Name (click to sort)";
+        th.addEventListener("click", ()=>{
+            sortStudents("Name");
+            drawTable(tbody);
+        })
+        theadTr.append(th);
+        
+        th = document.createElement('td');
+        th.innerText = "Date of birth (click to sort)";
+        th.addEventListener("click", ()=>{
+            sortStudents("Birth");
+            drawTable(tbody);
+        })
+        theadTr.append(th);
+
+        th = document.createElement('td');
+        th.innerText = "Years of study (click to sort)";
+        th.addEventListener("click", ()=>{
+            sortStudents("Start");
+            drawTable(tbody);
+        })
+        theadTr.append(th);
+
+        th = document.createElement('td');
+        th.innerText = "Faculty (click to sort)";
+        th.addEventListener("click", ()=>{
+            sortStudents("Faculty");
+            drawTable(tbody);
+        })
+        theadTr.append(th);
+
         thead.append(theadTr);
         table.append(thead);
         table.append(tbody);
@@ -79,16 +111,6 @@
             name.innerText = studentsArray[i].Name;
             newRow.append(name);
 
-            //middle name field 
-            let middle = document.createElement('td');
-            middle.innerText = studentsArray[i].Middle;
-            newRow.append(middle);
-
-            //surname field
-            let surname = document.createElement('td');
-            surname.innerText = studentsArray[i].Surname;
-            newRow.append(surname);
-
             //date of birth field 
             let now = new Date();
             let age = now.getFullYear() - parseInt(studentsArray[i].Birth.getFullYear());
@@ -101,7 +123,15 @@
 
             //start year field
             let start = document.createElement('td');
-            start.innerText = studentsArray[i].Start;
+            let today = new Date();
+            let end = parseInt(studentsArray[i].Start)+4;
+            let courseNumber = today.getFullYear() - parseInt(studentsArray[i].Start) +1;
+            if (today.getMonth()>8 && today.getFullYear()>=end){
+                start.innerText = studentsArray[i].Start + "-" + end + " (graduated)";
+            }
+            else{
+                start.innerText = studentsArray[i].Start + "-" + end + " (" + courseNumber + " course" +")";
+            }
             newRow.append(start);
 
             //start faculty field
@@ -273,9 +303,7 @@
                 (new Date(startInt, 1, 1) >= new Date(2000, 1, 1) && new Date(startInt, 1, 1) <= new Date())
             ) {
                 let newStudent = {
-                    Name: name.value.trim(),
-                    Surname: surname.value.trim(),
-                    Middle: middle.value.trim(),
+                    Name: name.value.trim() + " " + middle.value.trim() + " " + surname.value.trim(),
                     Birth: birth.valueAsDate,
                     Start: startInt,
                     Faculty: faculty.value.trim()
